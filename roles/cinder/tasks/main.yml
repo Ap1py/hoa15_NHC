@@ -1,0 +1,17 @@
+---
+- name: Ensure Cinder Packages are Installed
+  apt:
+    name:
+      - cinder-api
+      - cinder-scheduler
+      - cinder-volume
+    state: latest
+
+- name: Set up Cinder Configuration
+  template:
+    src: cinder.conf.j2
+    dest: /etc/cinder/cinder.conf
+
+- name: Initialize Cinder Database
+  command: cinder-manage db sync
+  become_user: cinder

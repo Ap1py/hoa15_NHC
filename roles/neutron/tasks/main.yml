@@ -1,0 +1,26 @@
+---
+- name: Ensure Neutron Packages are Installed
+  apt:
+    name:
+      - neutron-server
+      - neutron-plugin-ml2
+      - neutron-linuxbridge-agent
+      - neutron-l3-agent
+      - neutron-dhcp-agent
+      - neutron-metadata-agent
+    state: latest
+
+- name: Set up Neutron Configuration
+  template:
+    src: neutron.conf.j2
+    dest: /etc/neutron/neutron.conf
+
+- name: Set up ML2 Plugin Configuration
+  template:
+    src: ml2_conf.ini.j2
+    dest: /etc/neutron/plugins/ml2/ml2_conf.ini
+
+- name: Restart Neutron Server
+  service:
+    name: neutron-server
+    state: restarted
